@@ -13,6 +13,8 @@
 export ARCH=arm
 export CROSS_COMPILE=~/cm10.1/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
 
+export TARGET_PRODUCT=NX503A
+
 ##############################################################################
 # make zImage
 ##############################################################################
