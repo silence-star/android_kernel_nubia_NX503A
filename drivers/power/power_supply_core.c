@@ -170,7 +170,6 @@ static int __power_supply_changed_work(struct device *dev, void *data)
 	int i;
 
 	for (i = 0; i < psy->num_supplicants; i++)
-		/*这里表示*/
 		if (!strcmp(psy->supplied_to[i], pst->name)) {
 			if (pst->external_power_changed)
 				pst->external_power_changed(pst);

@@ -30,8 +30,7 @@ static LIST_HEAD(clk_list);
 static DEFINE_SPINLOCK(clk_list_lock);
 
 static struct dentry *debugfs_base;
-//hongdanlong enable debug_suspend
-static u32 debug_suspend =1;
+static u32 debug_suspend;
 
 struct clk_table {
 	struct list_head node;

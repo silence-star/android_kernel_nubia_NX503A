@@ -102,7 +102,7 @@ module_param_named(debug_mask_bms, debug_mask_bms, int, S_IRUGO | S_IWUSR | S_IW
 #endif
 
 #ifdef CONFIG_ZTEMT_CHARGE_X
-//打开调试接口
+//鎵撳紑璋冭瘯鎺ュ彛
 #define DEBUG  
 #undef KERN_DEBUG
 #define KERN_DEBUG KERN_INFO

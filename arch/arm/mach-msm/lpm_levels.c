@@ -33,8 +33,8 @@ enum {
 #define ADJUST_LATENCY(x)	\
 	((x == MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE) ?\
 		(num_online_cpus()) / 2 : 0)
-//dlhong enable lpm debug
-static int msm_lpm_lvl_dbg_msk = 1;
+
+static int msm_lpm_lvl_dbg_msk;
 
 module_param_named(
 	debug_mask, msm_lpm_lvl_dbg_msk, int, S_IRUGO | S_IWUSR | S_IWGRP

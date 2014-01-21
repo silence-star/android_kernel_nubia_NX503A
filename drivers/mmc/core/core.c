@@ -979,6 +979,10 @@ EXPORT_SYMBOL(mmc_start_req);
  */
 void mmc_wait_for_req(struct mmc_host *host, struct mmc_request *mrq)
 {
+#ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
+	if (mmc_bus_needs_resume(host))
+		mmc_resume_bus(host);
+#endif
 	__mmc_start_req(host, mrq);
 	mmc_wait_for_req_done(host, mrq);
 }
@@ -1219,6 +1223,10 @@ void mmc_set_data_timeout(struct mmc_data *data, const struct mmc_card *card)
 {
 	unsigned int mult;
 
+	if (!card) {
+		WARN_ON(1);
+		return;
+	}
 	/*
 	 * SDIO cards only define an upper 1 s limit on access.
 	 */
@@ -2007,7 +2015,6 @@ int mmc_resume_bus(struct mmc_host *host)
 
 	if (host->bus_ops->detect && !host->bus_dead)
 		host->bus_ops->detect(host);
-
 	mmc_bus_put(host);
 	printk("%s: Deferred resume completed\n", mmc_hostname(host));
 	return 0;
@@ -3119,16 +3126,13 @@ int mmc_detect_card_removed(struct mmc_host *host)
 }
 EXPORT_SYMBOL(mmc_detect_card_removed);
 
-
 extern void clear_detect_flag(void);
 extern int check_detect_flag(void);
-
 void mmc_rescan(struct work_struct *work)
 {
 	struct mmc_host *host =
 		container_of(work, struct mmc_host, detect.work);
 	bool extend_wakelock = false;
-
 	if(host->index == 1) {
 		if(check_detect_flag()) {
 			printk("Broadcom enable detect, continue\n");
@@ -3138,7 +3142,6 @@ void mmc_rescan(struct work_struct *work)
 			return;
 		}
 	}		
-				
 
 	if (host->rescan_disable)
 		return;
@@ -3505,7 +3508,7 @@ printk("Broadcom enter %s \n", __func__);
 
 	if (!err && !mmc_card_keep_power(host)) {
         if(host->index != 1)
-            mmc_power_off(host);
+		mmc_power_off(host);
         else
             mmc_gate_clock(host);
     }

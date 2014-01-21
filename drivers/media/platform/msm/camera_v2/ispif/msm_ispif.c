@@ -19,6 +19,7 @@
 #include <linux/platform_device.h>
 #include <linux/gpio.h>
 #include <linux/iopoll.h>
+#include <linux/ratelimit.h>
 #include <media/msmb_isp.h>
 
 #include "msm_ispif.h"
@@ -73,18 +74,18 @@ static struct msm_cam_clk_info ispif_8974_reset_clk_info[] = {
 	{"csi0_pix_clk", NO_SET_RATE},
 	{"csi0_rdi_clk", NO_SET_RATE},
 #ifdef CONFIG_ZTEMT_CAMERA_PATCH
-    {"csi1_src_clk", INIT_RATE}, 
-    {"csi1_clk", NO_SET_RATE}, 
-    {"csi1_pix_clk", NO_SET_RATE}, 
-    {"csi1_rdi_clk", NO_SET_RATE}, 
-    {"csi2_src_clk", INIT_RATE}, 
-    {"csi2_clk", NO_SET_RATE}, 
-    {"csi2_pix_clk", NO_SET_RATE}, 
-    {"csi2_rdi_clk", NO_SET_RATE}, 
-    {"csi3_src_clk", INIT_RATE}, 
-    {"csi3_clk", NO_SET_RATE}, 
-    {"csi3_pix_clk", NO_SET_RATE}, 
-    {"csi3_rdi_clk", NO_SET_RATE}, 
+	{"csi1_src_clk", INIT_RATE},
+	{"csi1_clk", NO_SET_RATE},
+	{"csi1_pix_clk", NO_SET_RATE},
+	{"csi1_rdi_clk", NO_SET_RATE},
+	{"csi2_src_clk", INIT_RATE},
+	{"csi2_clk", NO_SET_RATE},
+	{"csi2_pix_clk", NO_SET_RATE},
+	{"csi2_rdi_clk", NO_SET_RATE},
+	{"csi3_src_clk", INIT_RATE},
+	{"csi3_clk", NO_SET_RATE},
+	{"csi3_pix_clk", NO_SET_RATE},
+	{"csi3_rdi_clk", NO_SET_RATE},
 #endif
 	{"vfe0_clk_src", INIT_RATE},
 	{"camss_vfe_vfe0_clk", NO_SET_RATE},
@@ -140,9 +141,9 @@ static int msm_ispif_reset_hw(struct ispif_device *ispif)
 		if (timeout <= 0) {
 			pr_err("%s: VFE1 reset wait timeout\n", __func__);
         #ifdef CONFIG_ZTEMT_CAMERA_PATCH
-        msm_cam_clk_enable(&ispif->pdev->dev, 
-        ispif_8974_reset_clk_info, reset_clk, 
-        ARRAY_SIZE(ispif_8974_reset_clk_info), 0); 
+			msm_cam_clk_enable(&ispif->pdev->dev,
+				ispif_8974_reset_clk_info, reset_clk,
+				ARRAY_SIZE(ispif_8974_reset_clk_info), 0);
         #endif
 			return -ETIMEDOUT;
 		}
@@ -1055,7 +1056,8 @@ static long msm_ispif_subdev_ioctl(struct v4l2_subdev *sd,
 		return 0;
 	}
 	default:
-		pr_err("%s: invalid cmd 0x%x received\n", __func__, cmd);
+		pr_err_ratelimited("%s: invalid cmd 0x%x received\n",
+			__func__, cmd);
 		return -ENOIOCTLCMD;
 	}
 }

@@ -2848,8 +2848,10 @@ static void wcd9xxx_swch_irq_handler(struct wcd9xxx_mbhc *mbhc)
 	if ((mbhc->current_plug == PLUG_TYPE_NONE) && insert) {
 		mbhc->lpi_enabled = false;
 		wmb();
-        /* cancel detect plug */
-        wcd9xxx_cancel_hs_detect_plug(mbhc,&mbhc->correct_plug_swch);
+
+		/* cancel detect plug */
+		wcd9xxx_cancel_hs_detect_plug(mbhc,
+					      &mbhc->correct_plug_swch);
 
 		/* Disable Mic Bias pull down and HPH Switch to GND */
 		snd_soc_update_bits(codec, mbhc->mbhc_bias_regs.ctl_reg, 0x01,

@@ -397,8 +397,6 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
 
 	(void)mmc_host_runtime_suspend;
 	(void)mmc_host_runtime_resume;
-
-
 	if (!idr_pre_get(&mmc_host_idr, GFP_KERNEL))
 		return NULL;
 

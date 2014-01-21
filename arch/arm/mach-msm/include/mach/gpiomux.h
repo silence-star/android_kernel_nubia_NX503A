@@ -116,7 +116,6 @@ enum msm_tlmm_misc_reg {
 	#ifdef CONFIG_ZTEMT_CAMERA_MCLK_24M
 	TLMM_SPARE_REG = 0x2024,
 	#endif
-
 };
 
 void msm_tlmm_misc_reg_write(enum msm_tlmm_misc_reg misc_reg, int val);

@@ -1169,10 +1169,8 @@ int mdss_dsi_cmds_tx(struct mdss_dsi_ctrl_pdata *ctrl,
 		mdss_dsi_cmd_dma_add(tp, cm);
 		mdss_dsi_cmd_dma_tx(ctrl, tp);
 		dchdr = &cm->dchdr;
-
 		if (dchdr->wait)
 			usleep(dchdr->wait * 1000);
-
 		cm++;
 	}
 
@@ -1421,6 +1419,7 @@ void mdss_dsi_wait4video_done(struct mdss_dsi_ctrl_pdata *ctrl)
 	INIT_COMPLETION(ctrl->video_comp);
 	mdss_dsi_enable_irq(ctrl, DSI_VIDEO_TERM);
 	spin_unlock_irqrestore(&ctrl->mdp_lock, flag);
+
 	wait_for_completion_timeout(&ctrl->video_comp,
 			msecs_to_jiffies(VSYNC_PERIOD * 4));
 
@@ -1465,7 +1464,9 @@ void mdss_dsi_cmd_mdp_busy(struct mdss_dsi_ctrl_pdata *ctrl)
 		/* wait until DMA finishes the current job */
 		pr_debug("%s: pending pid=%d\n",
 				__func__, current->pid);
-		wait_for_completion(&ctrl->mdp_comp);
+		if (!wait_for_completion_timeout(&ctrl->mdp_comp,
+					msecs_to_jiffies(DMA_TX_TIMEOUT)))
+			pr_err("%s: timeout error\n", __func__);
 	}
 	pr_debug("%s: done pid=%d\n",
 				__func__, current->pid);

@@ -25,7 +25,7 @@ static struct msm_sensor_power_setting imx135_power_setting[] = {
 	},
 	{
 		.seq_type = SENSOR_VREG,
-		.seq_val = CAM_VANA,    // This VREG is DRV_AVDD, it can enbale the IMX135's AVDD
+		.seq_val = CAM_VANA,
 		.config_val = 0,
 		.delay = 0,
 	},

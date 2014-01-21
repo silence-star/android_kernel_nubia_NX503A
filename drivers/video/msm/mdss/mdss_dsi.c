@@ -219,7 +219,6 @@ static int mdss_dsi_panel_power_on(struct mdss_panel_data *pdata, int enable)
 				return ret;
 			}
 		} else {
-
 			ret = regulator_disable(
 				(ctrl_pdata->shared_pdata).vdd_vreg);
 			if (ret) {
@@ -227,7 +226,6 @@ static int mdss_dsi_panel_power_on(struct mdss_panel_data *pdata, int enable)
 					__func__);
 				return ret;
 			}
-
 
 			ret = regulator_disable(
 				(ctrl_pdata->shared_pdata).vdda_vreg);

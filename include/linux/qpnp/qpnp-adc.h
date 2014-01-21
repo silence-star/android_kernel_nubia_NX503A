@@ -34,13 +34,13 @@ enum qpnp_vadc_channels {
 	VSYS,
 	DIE_TEMP,
 	REF_625MV,
-	REF_125V,  //10
+	REF_125V,
 	CHG_TEMP,
 	SPARE1,
 	SPARE2,
 	GND_REF,
 	VDD_VADC,
-	P_MUX1_1_1, // HW id
+	P_MUX1_1_1,
 	P_MUX2_1_1,
 	P_MUX3_1_1,
 	P_MUX4_1_1,

@@ -2396,6 +2396,7 @@ static int msm_hs_startup(struct uart_port *uport)
 	 * queuing RX request. Hence mb() requires here.
 	 */
 	mb();
+
 	if (use_low_power_wakeup(msm_uport)) {
 		ret = irq_set_irq_wake(msm_uport->wakeup.irq, 1);
 		if (unlikely(ret)) {
